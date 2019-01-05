@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Manyone</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-store no-cache must-revalidate post-check=0 pre-check=0">
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- jquery.scrollbar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.css"/>
+     <link type="text/css" rel="stylesheet" href="/static/css/scrollbar-macosx.css"/>
+
+    <!-- jquery.ui -->
+    <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.min.css" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- jquery.dataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--- bootstrap-non-responsive  -->
+    <link rel="stylesheet" href="static/css/non-responsive.css">
+
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- emoji -->
+    <link rel="stylesheet" href="/static/css/emoji.css">
+    <script src="/static/js/emoji/config.js"></script>
+    <script src="/static/js/emoji/util.js"></script>
+    <script src="/static/js/emoji/jquery.emojiarea.js"></script>
+    <script src="/static/js/emoji/emoji-picker.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <!-- Chart.bundle.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
+    <!-- sweetalert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.js"></script>
+    <!-- core.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+    <!-- select2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
+    <!-- socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+    <!-- peer.js -->
+    <script src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
+    <!-- D3js -->
+    <script src="/static/js/d3.js"></script>
+    <script src="/static/js/d3plus.js"></script>
+    <script src="/static/js/biPartite.js"></script>
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.2/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.8/d3plus.full.min.js"></script>
+    <script src="https://d3plus.org/js/d3.js"></script>
+    <script src="https://d3plus.org/js/d3plus.js"></script>
+    -->
+    <!-- Screen-Share -->
+    <script src="https://cdn.webrtc.ecl.ntt.com/screenshare-latest.min.js"></script>
+
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/static/css/_all-skins.min.css">
+    <script src="/static/js/app.min.js"></script>
+
+    <!-- Original -->
+    <script src="/static/js/manyone_com.js?var=3"></script>
+    <script src="/static/js/manyone_function.js?var=3"></script>
+    <link rel="stylesheet" href="/static/css/manyone.css?var=3"></script>
+
+    <!-- icon -->
+    <link rel="shortcut icon" type="image/ico" href="/static/img/manyone_icon.ico">
+
+    <!-- google adsense -->
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-8466234525126114",
+        enable_page_level_ads: true
+      });
+    </script>
+
+</head>
+
+<body class="hold-transition skin-blue layout-top-nav">
+    <div class="wrapper">
+        <header class="main-header">
+            <nav class="navbar navbar-fixed-top" style="height:0px">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a href="/" class="navbar-brand" style="margin-top: -8px">
+                            <img src="/static/img/manyone_logo.png" style="width: 130px;margin-left: 10px;">
+                        </a>
+                    </div>
+                    <div class="pull-left">
+                        <ul  class="nav navbar-nav">
+                            {% if rst_login_user_auth.sysadm_access_flg == 1 %}
+                            <li><a href="/admin">システム管理</i></a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="pull-right">
+                        {% if rst_m_user %}
+                        <form id="select_user_box" class="navbar-form navbar-left" style="margin-top: 11px">
+                            <select class="form-control select2" style="width: 180px;" onchange="fnc_select_user()" id="user_search">
+                                <option value="">ユーザーを検索</option>
+                                {% for rst_user in rst_m_user %}
+                                <option value="#{{ rst_user.org_id }}_{{ rst_user.user_id }}">
+                                    {{ rst_user.user_nm }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        {% endif %}
+                        <ul id="nav_my_menu" class="nav navbar-nav">
+                            {% if rst_login_user %}
+                            <li id="nav_user_prof" class="user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="control-sidebar" aria-expanded="false">
+                                    <img src="/static/img/user/{{ rst_login_user.profile_img_file }}" class="user-image" onerror="this.src='/static/img/user/noimage.png'">
+                                    <span>{{ rst_login_user.user_nm }}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <ul class="nav navbar-nav">
+                            <li id="nav_logout" class="user user-menu">
+                                <a href="/logout"><span>ログアウト</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        {% block content %}
+        {% endblock %}
+<!--
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 0.1.0
+            </div>
+            <strong>Copyright © 2017 </strong> All rights reserved.
+        </footer>
+-->
+
+        <!-- BootStrap Modal -->
+        <div class="modal fade" id="modal_com" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div id="modal_h" class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div id="modal_b" class="modal-body"></div>
+              <div id="modal_f" class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BootStrap Modal -->
+        <div class="modal fade" id="modal_help" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div id="modal_help_h" class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div id="modal_help_b" class="modal-body"></div>
+              <div id="modal_help_f" class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+
+        <aside id="my_user_sidebar" class="control-sidebar control-sidebar-dark" style="display:none;">
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active">
+                    <a href="#sidebar-my-voice" data-toggle="tab" aria-expanded="true" onclick="fnc_ctl_sidebar('my-voice')">
+                        <i class="fa fa-commenting-o"> ボイス</i>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#sidebar-my-setting" data-toggle="tab" aria-expanded="false" onclick="fnc_ctl_sidebar('my-setting')">
+                        <i class="fa fa-gears"> 設定</i>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#sidebar-my-analyze" data-toggle="tab" aria-expanded="false" onclick="fnc_ctl_sidebar('my-analyze')">
+                        <i class="fa fa-bar-chart"> 集計</i>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#sidebar-my-data" data-toggle="tab" aria-expanded="false" onclick="fnc_ctl_sidebar('my-data')">
+                        <i class="fa fa-table"> 管理</i>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="sidebar-my-voice" class="tab-pane active scrollbar-macosx" style="height:564px">
+                    <div class="box">
+                        <div class="box-body">
+                            <div id="send_my_voice"></div>
+                            <div id="my_voice" style="color: black"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane scrollbar-macosx" id="sidebar-my-setting" style="height:564px">
+                    <div class="box" style="color: black">
+                        <div class="box-body box-profile">
+                            <div class="text-center">
+                                <img class="img-circle" src="/static/img/user/{{ rst_login_user.profile_img_file }}" onerror="this.src='/static/img/user/noimage.png'" style="width:200px"/>
+                            </div>
+                            <br>
+                            <h3 id="prof_user_nm" class="profile-username text-center">
+                                {{ rst_login_user.user_nm }}
+                            </h3>
+                            <div class='text-center'>
+                                <strong>組織</strong>
+                                <p>
+                                    {{ rst_login_org.org_nm }}
+                                </p>
+                                <br>
+                                <strong>所属</strong>
+                                <p id="prof_user_work" style="width:100%;">
+                                    {% if rst_login_user.profile_work == None %}
+                                        (未設定)
+                                    {% else %}
+                                        {{ rst_login_user.profile_work }}
+                                    {% endif %}
+                                </p>
+                                <br>
+                                <strong>メッセージ</strong>
+                                <p id="prof_user_msg" style="width:100%;">
+                                    {% if rst_login_user.profile_msg == None %}
+                                        (未設定)
+                                    {% else %}
+                                        {{ rst_login_user.profile_msg }}
+                                    {% endif %}
+                                </p>
+                                <br>
+                            </div>
+                            <div class="text-center" style="padding: 5px">
+                                <button id="modal_user_edit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_com">
+                                    <b>プロフィール編集</b>
+                                </button>
+                                <button id="modal_user_password_edit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_com">
+                                    <b>パスワード変更</b>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane scrollbar-macosx" id="sidebar-my-analyze" style="height:564px">
+
+                    <div class="row row-eq-height">
+                        <div class="col-md-4" style="padding-left:20px; padding-right: 1px;">
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3 id="my_voice_cnt">-</h3>
+                                    <p>ボイス数</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-commenting-o"></i>
+                                </div>
+                            </div>
+                            <div class="small-box bg-aqua" style="background-color: #3c8dbc !important;">
+                                <div class="inner">
+                                    <h3 id="my_voice_comment_cnt">-</h3>
+                                    <p>コメント数</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-commenting-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding-left:20px; padding-right: 1px;">
+                            <div class="box">
+                                <div class="box-body">
+                                    <canvas id="my_voice_tatal"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-eq-height">
+                        <div class="col-md-4" style="padding-left:20px; padding-right: 1px;">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3 id="my_talk_send_cnt">-</h3>
+                                    <p>トーク数(送信)</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-comments"></i>
+                                </div>
+                            </div>
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3 id="my_talk_resv_cnt">-</h3>
+                                    <p>トーク数(受信)</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-comments"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding-left:20px; padding-right: 1px;">
+                            <div class="box">
+                                <div class="box-body">
+                                    <canvas id="my_talk_tatal"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-eq-height">
+                        <div class="col-md-4" style="padding-left:20px; padding-right: 1px;">
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3 id="my_video_tatal_time">-</h3>
+                                    <p>ビデオ通話使用時間</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-video-camera"></i>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3 id="my_video_tatal_call_resv_cnt">-</h3>
+                                    <p>通話回数(発信/着信)</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-video-camera"></i>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                        <div class="col-md-8" style="padding-left:20px; padding-right: 1px;">
+                            <div class="box">
+                                <div class="box-body">
+                                    <canvas id="my_video_tatal"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+
+                <div class="tab-pane  scrollbar-macosx" id="sidebar-my-data" style="height:564px">
+                    <div class="row row-eq-height">
+                        <div class="col-md-12" style="padding-left:10px; padding-right: 10px;">
+                            <div class="box" style="color: black">
+                                <div calss="box-header" style="padding:10px; border-bottom: 1px #BBBBBB solid">
+                                    <h4>データ管理</h4>
+                                    <div class="form-group pull-left">
+                                        <select  id="my_mng_select" class="form-control" style="height:30px;font-size: 12px;">
+                                            <option>{{ rst_login_user.user_nm }}のボイス</option>
+                                            <option>{{ rst_login_user.user_nm }}のコメント</option>
+                                            <option>{{ rst_login_user.user_nm }}のトーク</option>
+                                            <option>{{ rst_login_user.user_nm }}のグループトーク</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group input-group-sm">
+                                        <input id="my_mng_text" type="text" class="form-control" placeholder="検索する文字を入力....">
+                                        <span class="input-group-btn">
+                                            <button id="my_mng_btn" type="button" class="btn btn-primary">データ取得</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="box-body" id="table_box"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+    </div>
+
+<style>
+</style>
+
+<script>
+
+
+
+function fnc_img_replace(img) {
+    $('#user_img').empty()
+    $('#user_img').append(
+        "<img src='/static/img/user/" + img + "' style='width:100px'>" +
+        "<div class='text' style='margin-bottom: 0px'>" + img + "</div>"
+    )
+}
+function fnc_admin_user_edit_img_replace(img) {
+    $('#admin_user_edit_user_img').empty()
+    $('#admin_user_edit_user_img').append(
+        "<img src='/static/img/user/" + img + "' style='width:100px'>" +
+        "<div class='text' style='margin-bottom: 0px'>" + img + "</div>"
+    )
+}
+
+    /* ------------------------------------------ */
+    /* モーダル作成                   　              */
+    /* ------------------------------------------ */
+    $('#modal_com').on('show.bs.modal', function(e) {
+        $('#modal_h').empty()
+        $('#modal_b').empty()
+        $('#modal_f').empty()
+        var w_id = e.relatedTarget.id
+        /* ------------------------------------------ */
+        /* [個人設定]プロフィール編集        　              */
+        /* ------------------------------------------ */
+        if (w_id == 'modal_user_edit') {
+            $('#modal_h').append(
+                "<div class='text-center'>" +
+                    "<h4 class='modal-title'>" +
+                    "マイプロフィール" +
+                    "</h4>" +
+                "</div>"
+            );
+            $('#modal_b').append(
+                "<div class='text-center'>" +
+                    "<div id='user_img'>" +
+                        "<img class='img-circle' src='/static/img/user/" + _LOGIN_USER_IMG + "' onerror=\"this.src='/static/img/user/noimage.png'\" style='width:200px'/>" +
+                        "<div class='text'>{{ rst_login_user.profile_img_file }}</div>" +
+                    "</div>" +
+                    "<ul style='height:60px; overflow:auto;border:1px #BBBBBB solid; padding:0 0 0 0; margin:0 0 40px 0;'>" +
+                        {% for img_user in list_img_user %}
+                        "<li class='pull-left' onclick=fnc_img_replace('{{img_user}}') style='list-style:none; margin-bottom:10px;'>" +
+                            "<img src='/static/img/user/{{ img_user}}' style='width:50px'>" +
+                        "</li>" +
+                        {% endfor %}
+                    "</ul>" +
+                    "<div class='form-group'>" +
+                        "<label for='user_msg'>メッセージ</label>" +
+                        "<textarea id='user_msg' class='form-control' rows='5' maxlength='400'></textarea>" +
+                    "</div>" +
+                "</div>"
+            );
+            $('#modal_f').append(
+                "<div class='text-center'>" +
+                    "<button id='com_save' type='button' class='btn btn-primary' data-dismiss='modal'>" +
+                    "保存" +
+                    "</button>" +
+                    "<button id='com_cancel' type='button' class='btn btn-default' data-dismiss='modal'>" +
+                    "取消" +
+                    "</button>" +
+                "</div>"
+            );
+            /* ------------------------------------------ */
+            /* [個人設定]プロフィール編集 -> 保存               */
+            /* ------------------------------------------ */
+            $('#com_save').click(function() {
+                var user_img  = escapeHTML($('#user_img > div').text());
+                var user_msg  = escapeHTML($('#user_msg').val());
+                // ユーザーマスタ更新
+                _SOK.emit('sok_cli_common_user_profile_upd', {
+                     user_img:  encodeURIComponent(user_img)
+                    ,user_msg:  encodeURIComponent(user_msg)
+                });
+            });
+            /* ------------------------------------------ */
+            /* [個人設定]プロフィール編集 初期値  　              */
+            /* ------------------------------------------ */
+            var w_user_msg  = $('#prof_user_msg').text().replace(/^\s+|\s+$/g,'')
+            if ( w_user_msg == '(未設定)') {
+                $('#user_msg').val("");
+            } else {
+                $('#user_msg').val(w_user_msg);
+            }
+        /* ------------------------------------------ */
+        /* [個人設定]パスワード変更                        */
+        /* ------------------------------------------ */
+        } else if (w_id == 'modal_user_password_edit') {
+            $('#modal_h').append(
+                "<div class='text-center'>" +
+                    "<h4 class='modal-title'>" +
+                    "パスワード変更" +
+                    "</h4>" +
+                "</div>"
+            );
+            $('#modal_b').append(
+                "<div class='form-group'>" +
+                    "<label for='before_password'>変更前パスワード</label>" +
+                    "<input id='before_password' type='text' class='form-control' style='background-color:white;color:#BBBBBB;'>" +
+                    "<label for='after_password'>変更後パスワード</label>" +
+                    "<input id='after_password' type='text' class='form-control' style='background-color:white;color:#BBBBBB;'>" +
+                "</div>"
+            );
+            $('#modal_f').append(
+                "<div class='text-center'>" +
+                    "<button id='com_save' type='button' class='btn btn-primary' data-dismiss='modal'>" +
+                    "保存" +
+                    "</button>" +
+                    "<button type='button' class='btn btn-default' data-dismiss='modal'>" +
+                    "取消" +
+                    "</button>" +
+                "</div>"
+            );
+            /* ------------------------------------------ */
+            /* [個人設定]パスワード変更 -> 保存                */
+            /* ------------------------------------------ */
+            $('#com_save').click(function() {
+                var before_password = escapeHTML($('#before_password').val());
+                var after_password  = escapeHTML($('#after_password').val());
+                _SOK.emit('sok_cli_common_user_password_upd', {
+                     before_password:  before_password
+                    ,after_password:   after_password
+                });
+            });
+        /* ------------------------------------------ */
+        /* [ユーザー]ユーザーBOXリンク選択                    */
+        /* ------------------------------------------ */
+        } else if (0 === w_id.indexOf('modal_user_prof')) {
+            /* ------------------------------------------ */
+            /* [ユーザー]ユーザー情報取得                       */
+            /* ------------------------------------------ */
+            _SOK.emit('sok_srv_get_m_user', {
+                 org_id  : w_id.split("_")[3]
+                ,user_id : w_id.split("_")[4]
+            });
+        }
+
+    });
+
+    /* ------------------------------------------ */
+    /* [ユーザー]プロフィール更新                         */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_common_user_profile_upd', function(msg) {
+        var w_result = msg.result
+        var w_msg    = msg.msg
+        if (w_result == "success") {
+            swal(
+                '更新に成功しました'
+               ,w_msg
+               ,'success'
+                )
+              // モーダルを閉じる
+              $('#com_cancel').click()
+        } else if (w_result == "error") {
+            swal(
+                '更新に失敗しました'
+               ,w_msg
+               ,'error'
+                )
+        }
+    })
+    /* ------------------------------------------ */
+    /* [ユーザー]パスワード更新                         */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_common_user_password_upd', function(msg) {
+        var w_result = msg.result
+        var w_msg    = msg.msg
+        if (w_result == "success") {
+            swal(
+                '更新に成功しました'
+               ,w_msg
+               ,'success'
+                )
+              // モーダルを閉じる
+              $('#com_cancel').click()
+        } else if (w_result == "error") {
+            swal(
+                '更新に失敗しました'
+               ,w_msg
+               ,'error'
+                )
+        }
+    })
+/* ------------------------------------------ */
+/* ログインユーザー情報                            */
+/* ------------------------------------------ */
+{% if rst_login_org.org_id %}
+_LOGIN_ORG_ID    = "{{ rst_login_org.org_id  }}"
+{% endif %}
+{% if rst_login_org.org_nm %}
+_LOGIN_ORG_NM    = "{{ rst_login_org.org_nm  }}"
+{% endif %}
+{% if rst_login_user.user_id %}
+_LOGIN_USER_ID   = "{{ rst_login_user.user_id }}"
+{% endif %}
+{% if rst_login_user.user_nm %}
+_LOGIN_USER_NM   = "{{ rst_login_user.user_nm }}"
+{% endif %}
+{% if rst_login_user.profile_img_file %}
+_LOGIN_USER_IMG  = "{{ rst_login_user.profile_img_file }}"
+{% else %}
+_LOGIN_USER_IMG  = "noimage.png"
+{% endif %}
+{% if rst_login_user.profile_work %}
+_LOGIN_USER_WORK = "{{ rst_login_user.profile_work }}"
+{% endif %}
+
+</script>
+</body>
+</html>

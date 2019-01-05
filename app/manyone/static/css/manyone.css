@@ -1,0 +1,50 @@
+._in_box {
+    margin-bottom: 0px;
+}
+._in_box_header {
+    border-width : 1px;
+    border-style :solid;
+    border-color :#BBBBBB;
+    border-radius: 3px;
+    border-bottom: none;
+}
+._in_box_body {
+    border-width : 1px;
+    border-style :solid;
+    border-color :#BBBBBB;
+    border-radius: 3px;
+    border-top   : none;
+}
+
+._top_content {
+    margin-top: 50px;
+}
+._nav_border {
+    border-width : 1px;
+    border-style : solid;
+    border-color : #BBBBBB;
+    border-radius: 3px;
+}
+._tag {
+    background-color: #e4e4e4;
+    border          : 1px solid #aaa;
+    border-radius   : 4px;
+    cursor          : default;
+    float           : left;
+    margin-right    : 10px;
+    margin-top      : 5px;
+    padding         : 0 5px;
+}
+._select_list {
+    border-radius   : 2px;
+    padding         : 5px;
+    background-color: #f4f4f4;
+    margin-bottom   : 2px;
+    border-style    : solid;
+    border-width    : 1px;
+    border-color    : #BBBBBB;
+    color           : black;
+}
+.control-sidebar-bg, .control-sidebar {
+  right: -690px;
+}

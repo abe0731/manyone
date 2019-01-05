@@ -1,0 +1,469 @@
+ {% extends "layout.html" %} {% block content %}
+<script src="/static/js/manyone_index.js?var=17"></script>
+
+<div class="content-wrapper" style="height:auto">
+    <section class="content _top_content" style="padding:0px;">
+    <div id="abc" class="row row-eq-height">
+
+        <!-- ============================================================================= -->
+        <!-- [レフト]ユーザーBOX                                                                -->
+        <!-- ============================================================================= -->
+        <div id="col-user" class="col-xs-3" style="padding-left:20px; padding-right: 1px;">
+            <div id="user_content_box" class="box" style="margin-bottom: 0px">
+                <div class="box-header with-border" style="padding:5px; text-align: center;">
+                    <button type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;background-color: rgba(255, 0, 0, 0.3);color:black;font-weight: 600">
+                        <i class="fa fa-user"></i> ユーザー
+                    </button>
+                    <button id="chg_group_mode" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%">
+                        <i class="fa fa-users"></i> グループ
+                    </button>
+                </div>
+                <div id="user_scroll_content" class="box-body scrollbar-macosx" style="height:564px">
+                    <ul id="select_list" class="products-list product-list-in-box" style="border: solid 1px #BBBBBB;border-radius:3px">
+
+                        {% for rst_user in rst_m_user %}
+                        <li id="select_list_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="item" style="padding:0px;">
+                            <div id="user_boxhb_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="box collapsed-box" style="margin-bottom: 0px;border-top:none">
+                            <div id="user_boxh_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="box-header" data-widget="collapse">
+                                <div class="user-block">
+                                    <img class="img-circle" src="/static/img/user/{{ rst_user.profile_img_file }}" onerror="this.src='/static/img/user/noimage.png'"/>
+                                    <span class="username" style="color: black">
+                                        {{ rst_user.user_nm }}
+                                    </span>
+                                    <span class="description">
+                                        <span id="user_box_status_{{ rst_user.org_id }}_{{ rst_user.user_id }}" style="overflow:hidden; white-space:nowrap; width:300px; height:20px; text-overflow:ellipsis;">
+                                        {% if rst_user.status == 'ONLINE' %}
+                                            <small class="label label-primary">ログイン中</small>
+                                        {% else %}
+                                        <script>
+                                            document.write(fnc_get_last_login_timing("{{now_dtm }}","{{ rst_user.upd_dtm }}"))
+                                        </script>
+                                        {% endif %}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div id="user_box_tool_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="box-tools">
+                                    {% if rst_user.target_voice_cnt %}
+                                    <span id="voice_info_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="label label-info">
+                                        {{rst_user.target_voice_cnt}}
+                                    </span>
+                                    {% endif %}
+                                    {% if rst_user.target_talk_cnt %}
+                                    <span id="talk_info_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="label label-warning">
+                                        {{rst_user.target_talk_cnt}}
+                                    </span>
+                                    {% endif %}
+                                    {% if rst_user.target_video_cnt %}
+                                    <span id="video_info_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="label label-danger">
+                                        {{rst_user.target_video_cnt}}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div  id="user_boxb_{{ rst_user.org_id }}_{{ rst_user.user_id }}" class="box-body" style="height:auto;border:10px solid white">
+                                <div>
+                                    <ul class="contacts-list">
+                                      <li>
+                                            <small class="pull-left">組織/所属</small><br>
+                                            <small>
+                                                {% if rst_user.org_nm %}
+                                                {{ rst_user.org_nm }}<br>
+                                                {% endif %}
+                                                {% if rst_user.profile_work %}
+                                                {{ rst_user.profile_work }}
+                                                {% endif %}
+                                            </small>
+                                      </li>
+                                      <li>
+                                            <small class="pull-left">メッセージ</small><br>
+                                            <small>
+                                                {% if rst_user.profile_msg %}
+                                                {{ rst_user.profile_msg }}
+                                                {% endif %}
+                                            </small>
+                                      </li>
+                                      <li style="text-align: center">
+                                        <div class="col-xs-6" style="padding-right:0px;padding-left: 0px">
+                                            <button id='start_audio_only_{{ rst_user.org_id }}_{{ rst_user.user_id }}' type="button" class="btn btn-app" style="width:100%;margin:0px;padding:0px;background-color: #337ab7;color:#fff">
+                                            <i class="fa fa-phone" aria-hidden="true"></i> 音声通話
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-6" style="padding-right:0px;padding-left: 0px">
+                                            <button id='start_video_{{ rst_user.org_id }}_{{ rst_user.user_id }}' type="button" class="btn btn-app" style="width:100%;margin:0px;padding:0px;background-color: #337ab7;color:#fff">
+                                            <i class="fa fa-video-camera" aria-hidden="true"></i> ビデオ通話
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-6" style="padding-right:0px;padding-left: 0px">
+                                            <button id='start_data_send_{{ rst_user.org_id }}_{{ rst_user.user_id }}' type="button" class="btn btn-app" style="width:100%;margin:0px;padding:0px;background-color: #337ab7;color:#fff">
+                                            <i class="fa fa-files-o" aria-hidden="true"></i> データ送信
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-6" style="padding-right:0px;padding-left: 0px">
+                                            <button id='start_screen_only_{{ rst_user.org_id }}_{{ rst_user.user_id }}' type="button" class="btn btn-app" style="width:100%;margin:0px;padding:0px;background-color: #337ab7;color:#fff">
+                                            <i class="fa fa-window-restore" aria-hidden="true"></i> 画面共有
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-12" style="padding-right:0px;padding-left: 0px">
+                                            <button id='start_screen_audio_{{ rst_user.org_id }}_{{ rst_user.user_id }}' type="button" class="btn btn-app" style="width:100%;margin:0px;padding:0px;background-color: #337ab7;color:#fff">
+                                                <i class="fa fa-window-restore" aria-hidden="true">
+                                                    <span style="font-size: 10px">+</span>
+                                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                                </i> 画面共有+音声通話
+                                            </button>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                </div>
+                                <div style="text-align: center" >
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="fnc_add_collapse('{{ rst_user.org_id }}','{{ rst_user.user_id }}')" style="border: 1px solid #BBBBBB ;width:100%">
+                                        閉じる
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- [レフト]グループBOX                                                                -->
+        <!-- ============================================================================= -->
+        <div id="col-group" class="col-xs-3" style="padding-left:20px; padding-right: 1px; display:none">
+            <div id="grp_content_box" class="box" style="margin-bottom: 0px">
+                <div class="box-header with-border" style="padding:5px; text-align: center;">
+
+                    <button id="chg_user_mode" ype="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%">
+                        <i class="fa fa-user"></i> ユーザー
+                    </button>
+                    <button type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;background-color: rgba(255, 0, 0, 0.3);color:black;font-weight: 600">
+                        <i class="fa fa-users"></i> グループ
+                    </button>
+                </div>
+                <div id="grp_scroll_content" class="box-body scrollbar-macosx" style="height:564px">
+                    <ul id="select_list" class="products-list product-list-in-box" style="border: solid 1px #BBBBBB;border-radius:3px">
+
+                        {% for rst_grp in rst_m_grp %}
+                        <li id="select_grp_list_{{ rst_grp.grp_id }}" class="item" style="padding:0px;">
+                            <div id="grp_boxh_{{ rst_grp.grp_id }}" class="box-header" style="opacity: 1; color: rgb(255, 255, 255);">
+                                <div class="user-block fa-minus">
+                                    <img class="img-circle mCS_img_loaded" src="/static/img/grp/{{ rst_grp.profile_img_file}}" onerror="this.src='/static/img/grp/noimage_grp.png'">
+                                    <span class="username" style="color: black">
+                                        {{rst_grp.grp_nm}}
+                                    </span>
+                                    <span class="description">
+                                        <span id="grp_box_status_{{ rst_grp.grp_id }}" style="overflow:hidden; white-space:nowrap; width:300px; height:20px; text-overflow:ellipsis;">
+                                            <small>最終更新:{{rst_grp.last_dtm}}</small>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div id="grp_box_tool_{{ rst_grp.grp_id }}" class="box-tools"></div>
+                            </div>
+                        </li>
+                        {% endfor %}
+
+                        {% if rst_login_user_auth.sysadm_support_flg == 1 %}
+                        <li id="select_grp_list_manyone" class="item" style="padding:0px;">
+                            <div id="grp_boxh_manyone" class="box-header" style="background-color: rgb(255, 255, 255); opacity: 1; color: rgb(68, 68, 68);">
+                                <div class="user-block">
+                                    <img class="img-circle mCS_img_loaded" src="/static/img/manyone_icon.ico">
+                                    <span class="username" style="color: black">
+                                        サポートセンター
+                                    </span>
+                                    <span class="description">
+                                        <span id="grp_box_status_manyone" style="overflow:hidden; white-space:nowrap; width:300px; height:20px; text-overflow:ellipsis;">
+                                        </span>
+                                    </span>
+                                </div>
+                                <div id="grp_box_tool_manyone" class="box-tools">
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- [センター]ビデオ                                                                   -->
+        <!-- ============================================================================= -->
+        <div id="col-video" class="col-xs-6" style="display:none;padding-left:1px; padding-right: 1px;">
+            <div id="video_content_box" class="box" style="margin-bottom: 0px">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-video-camera" aria-hidden="true"></i> 音声・ビデオ通話</h3>
+                </div>
+                <div id="video_scroll_content" class="box-body scrollbar-macosx" style="height:564px;padding:0px">
+                    <div id="ctl-video-h" style="text-align:center; background-color: #F5F5F5;">
+                        <button id="video_ctl_layout" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:49%;padding:0px">
+                       レイアウト変更<!-- -->
+                        </button>
+                        <button id="video_ctl_end" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:49%;padding:0px">
+                            通話を終了する
+                        </button>
+                    </div>
+                    <div id="media_my" tabindex="-1">
+                        <div id="my-video-h" style="text-align:center;background-color: #F5F5F5;">
+                            <span>{{ rst_login_user.user_nm }}のビデオ</span>
+                        </div>
+                        <video id="my-video" style="background-color:black;margin-bottom: -5px" muted="true" autoplay controls="1" poster="/static/img/no_my_video.png"></video>
+                    </div>
+                    <div id=media_their tabindex="-1">
+                        <div id="their-video-h" style="text-align:center;background-color: #F5F5F5;"></div>
+                        <video id="their-video" style="background-color:black;margin-bottom:-5px" muted="true" autoplay controls="1" poster="/static/img/no_their_video.png"></video>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- [センター]ボイス                                                                   -->
+        <!-- ============================================================================= -->
+        <div id="col-voice" class="col-xs-3" style="padding-left:15px; padding-right: 15px;">
+            <!-- ==================== 1行目 ==================== -->
+            <div id="col-center-row-1" class="row">
+                <div id="voice_content_box" class="box" style="margin-bottom: 0px">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-commenting-o"></i> ボイス</h3>
+                    </div>
+                    <div id="voice_scroll_content" class="box-body scrollbar-macosx" style="height:564px">
+                        <div id="voice">
+                            <div style="color: #BBBBBB;text-align: center">
+                                <i class="fa fa-commenting-o fa-5x"></i>
+                                <h1 style="color:#BBBBBB">選択したユーザーのボイスがここに表示されます</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ==================== 2行目 ==================== -->
+            <div id="col-center-row-2" class="row">
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- [ライト]トーク                                                                     -->
+        <!-- ============================================================================= -->
+        <div id="col-talk" class="col-xs-6" style="padding-left:1px; padding-right: 20px;">
+            <div id="talk_content_box" class="box" style="margin-bottom: 0px">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-comments-o"></i> トーク</h3>
+                </div>
+                <div id="talk_scroll_content" class="box-body direct-chat-messages scrollbar-macosx" style="height:564px">
+                    <div id="send_right_talk" class="direct-chat-msg right"></div>
+                    <div id="new_talk">
+                        <div style="color: #BBBBBB;text-align: center">
+                            <i class="fa fa-comments fa-5x"></i>
+                            <h1 style="color:#BBBBBB">選択したユーザーのトークがここに表示されます</h1>
+                        </div>
+                    </div>
+                    <div id="talk"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ============================================================================= -->
+        <!-- [センター]グループメンバー                                                            -->
+        <!-- ============================================================================= -->
+        <div id="col-group-talk-info" class="col-xs-3" style="padding-left:15px; padding-right: 15px; display:none">
+            <!-- ==================== 1行目 ==================== -->
+            <div id="col-center-grp-row-1" class="row">
+                <div id="talk_info_content_box" class="box" style="margin-bottom: 0px">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-users"></i> メンバー</h3>
+                    </div>
+                    <div id="talk_info_scroll_content" class="box-body scrollbar-macosx" style="height:564px">
+
+                        <ul id="select_talk_info_list" class="products-list product-list-in-box" style="border: solid 0px #BBBBBB;border-radius:3px">
+                            <!-- 初期メッセージ -->
+                            <div style="color: #BBBBBB;text-align: center">
+                                <i class="fa fa-commenting-o fa-5x"></i>
+                                <h1 style="color:#BBBBBB">選択したグループのメンバーがここに表示されます</h1>
+                            </div>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ==================== 2行目 ==================== -->
+            <div id="col-center-grp-row-2" class="row">
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- [ライト]グループトーク                                                               -->
+        <!-- ============================================================================= -->
+        <div id="col-group-talk" class="col-xs-6" style="padding-left:15px; padding-right: 35px; display:none">
+            <!-- ==================== 1行目 ==================== -->
+            <div id="col-right-grp-row-1" class="row">
+                <div id="grp_talk_content_box" class="box" style="margin-bottom: 0px">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-comments-o"></i> グループトーク</h3>
+                    </div>
+                    <div id="grp_talk_scroll_content" class="box-body scrollbar-macosx" style="height:564px">
+
+                        <div id="send_right_grp_talk" class="direct-chat-msg right"></div>
+                        <div id="new_grp_talk">
+                            <div style="color: #BBBBBB;text-align: center">
+                                <i class="fa fa-comments fa-5x"></i>
+                                <h1 style="color:#BBBBBB">選択したグループのトークがここに表示されます</h1>
+                            </div>
+                        </div>
+                        <div id="grp_talk"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- ==================== 2行目 ==================== -->
+            <div id="col-right-grp-row-2" class="row">
+            </div>
+        </div>
+        <!-- ============================================================================= -->
+        <!-- 非表示要素                                                                      -->
+        <!-- ============================================================================= -->
+        <input id='readfile' type='file' style='display:none;' multiple/>
+    </div>
+    </section>
+</div>
+
+<style>
+body {
+    overflow-y: hidden;
+}
+
+#modal-content {
+    width: 50% ;
+    margin: 0 ;
+    padding: 10px 20px ;
+    border: 2px solid #aaa ;
+    background: #fff ;
+    position: fixed ;
+    display: none ;
+    z-index: 999 ;
+}
+#modal-overlay {
+    z-index: 1 ;
+    display: none ;
+    position: fixed ;
+    top: 0 ;
+    left: 0 ;
+    width: 100% ;
+    height: 120% ;
+    background-color: rgba( 0,0,0, 0.75 ) ;
+}
+.button-link {
+    color: #00f ;
+    text-decoration: underline ;
+}
+.button-link:hover {
+    cursor: pointer ;
+    color: #f00 ;
+}
+
+
+
+#media_my {
+    position: fixed ;
+    z-index: 2000 ;
+}
+#media_their {
+    position: fixed ;
+    z-index: 1999 ;
+}
+
+#my-video {
+  width: 100%;
+  height: 100%;
+/*
+  width: 33%;
+  height: auto;
+*/
+  background-color: #eee;
+}
+
+#their-video {
+  width: 100%;
+  height: 100%;
+/*
+  width: 100%;
+  height: 75%;
+*/
+  background-color: #eee;
+}
+
+
+.fa-plus:before {
+   content: ""
+}
+
+.fa-minus:before {
+   content: ""
+}
+
+.emoji-menu{
+}
+</style>
+
+
+<script>
+
+function fnc_add_collapse(arg_org_id,arg_user_id) {
+    var w_user_boxh = "user_boxh_" + arg_org_id + "_" + arg_user_id
+    $("#" + w_user_boxh ).attr({"data-widget":"collapse"});
+}
+/* ------------------------------------------ */
+/* ユーザーBOXをクリックした場合、お知らせを解除する         */
+/* ------------------------------------------ */
+{% for rst_user in rst_m_user %}
+    // お知らせ解除
+    $(document).on('click', '#user_boxh_{{ rst_user.org_id }}_{{ rst_user.user_id }}', function(){
+        $('#user_box_tool_{{ rst_user.org_id }}_{{ rst_user.user_id }}').empty();
+    });
+{% endfor %}
+
+{% if rst_login_org.org_id == 'manyone' %}
+    $("#select_grp_list_manyone").css("display","none");
+{% endif %}
+
+// ビデオ通話終了ボタンを押したら
+function fnc_end_modal_video(){
+    _SOK.emit('sok_cli_index_video_call_end', {});
+
+    document.getElementById("my-video").removeAttribute('src')
+    document.getElementById("their-video").removeAttribute('src')
+    window.localStream = ""
+    window.tmpCall = ""
+    // 相手のビデオが存在したら消す
+    if (window.existingCall) {
+        window.existingCall.close();　// 通話終了
+    }
+    $("#media_my").fadeOut("slow") ;
+    $("#media_their").fadeOut("slow") ;
+};
+
+function fnc_start_video_timer(){
+    _VIDEO_START = new Date()
+    setInterval('fnc_set_video_timer()', 1000);
+}
+function fnc_set_video_timer(start_date){
+    now   = new Date();
+    datet = parseInt((now.getTime() - _VIDEO_START.getTime()) / 1000);
+    hour  = parseInt(datet / 3600);
+    min   = parseInt((datet / 60) % 60);
+    sec   = datet % 60;
+    if(hour < 10) { hour = "0" + hour; }
+    if(min < 10) { min = "0" + min; }
+    if(sec < 10) { sec = "0" + sec; }
+    var timer1 = hour + ':' + min + ':' + sec;
+    $('#video_timer').empty()
+    $('#video_timer').append(timer1)
+};
+function fnc_unset_overlay(){
+    swal.close()
+}
+</script>
+
+{% endblock %}

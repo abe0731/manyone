@@ -1,0 +1,1523 @@
+ {% extends "layout.html" %} {% block content %}
+<script src="/static/js/manyone_admin.js?var=3"></script>
+
+<div class="content-wrapper">
+    <section class="content _top_content" style="padding:0px;">
+
+    <div class="row row-eq-height">
+        <!-- ============================================================================= -->
+        <!-- メニュー                                                                         -->
+        <!-- ============================================================================= -->
+        <div id="col-admin-menu" class="col-xs-2" style="padding-left:20px; padding-right: 1px;">
+            <div id="admin_menu_box" class="box">
+                <div class="box-header with-border" style="padding:5px; text-align: center;">
+                    <h4> 管理メニュー</h4>
+                </div>
+                <div id="admin_menu_scroll_content" class="box-body scrollbar-macosx" style="height:537px;padding:0px">
+                    <ul id="admin_select_list" class="products-list product-list-in-box">
+                        {% if rst_login_user_auth.sysadm_user_flg == 1 %}
+                        <li id="admin_select_list_user_admin" class="item" style="padding:0px;margin-bottom: 0px">
+                            <div style="padding:10px">
+                                <span style="color: black">
+                                    <h4>ユーザー管理</h4>
+                                </span>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if rst_login_user_auth.sysadm_grp_flg == 1 %}
+                        <li id="admin_select_list_grp_admin" class="item" style="padding:0px;margin-bottom: 0px">
+                            <div style="padding:10px">
+                                <span style="color: black">
+                                    <h4>グループ管理</h4>
+                                </span>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if rst_login_user_auth.sysadm_cost_flg == 1 %}
+                        <!--
+                        <li id="admin_select_list_cost_admin" class="item" style="padding:0px;margin-bottom: 0px">
+                            <div style="padding:10px">
+                                <span style="color: black">
+                                    <h4>コスト管理</h4>
+                                </span>
+                            </div>
+                        </li>
+                        -->
+                        {% endif %}
+                        {% if rst_login_user_auth.sysadm_data_flg == 1 %}
+                        <li id="admin_select_list_data_admin" class="item" style="padding:0px;margin-bottom: 0px">
+                            <div style="padding:10px">
+                                <span style="color: black">
+                                    <h4>データ管理</h4>
+                                </span>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if rst_login_user_auth.sysadm_analyze_flg == 1 %}
+                        <li id="admin_select_list_summary_analyze" class="item" style="padding:0px;margin-bottom: 0px">
+                            <div style="padding:10px">
+                                <span style="color: black">
+                                    <h4>統計情報</h4>
+                                </span>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if rst_login_user_auth.sysadm_analyze_flg == 1 %}
+                        <li id="admin_select_list_link_analyze" class="item" style="padding:0px;margin-bottom: 0px">
+                            <div style="padding:10px">
+                                <span style="color: black">
+                                    <h4>連関分析</h4>
+                                </span>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- 初期表示                                                                       -->
+        <!-- ============================================================================= -->
+        <div id="col-admin-nobody" class="col-xs-10" style="padding-left:1px; padding-right:20px;">
+            <div class="box">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>(メニュータイトル)</h4>
+                </div>
+                <div id="admin_nobody_scroll_content" class="box-body" style="height:530px;text-align: center">
+                    <h4>選択した管理メニューの内容がここに表示されます</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================================= -->
+        <!-- ユーザー管理                                                                     -->
+        <!-- ============================================================================= -->
+        {% if rst_login_user_auth.sysadm_user_flg == 1 %}
+        <!-- リスト -->
+        <div id="col-admin-user-list" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box" style="border: 0px;margin-bottom: 0px;box-shadow:0px">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>ユーザー管理</h4>
+                </div>
+                <div class="box-body">
+                    <div class="box" style="border: 0px;margin-bottom: 0px;">
+                        <div class="box-header with-border" style="padding:5px;">
+                            <div class='col-xs-6 text-center'>
+                                <button type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;background-color: rgba(255, 0, 0, 0.3);color:black;font-weight: 600">
+                                    一覧
+                                </button>
+                                <button id="chg_admin_user_edit_mode" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;">
+                                    追加・編集
+                                </button>
+                            </div>
+                            <div class="col-xs-6">
+                            </div>
+                        </div>
+                        <div id="admin_user_list_scroll_content" class="box-body scrollbar-macosx" style="height:458px">
+                            <table id='table_admin_user_list' class='table table-bordered'>
+                                <thead id='table_admin_user_list_head'>
+                                    <tr>
+                                        <th class='col-xs-1 text-center'>ID</th>
+                                        <th class='col-xs-2 text-center'>ユーザー名</th>
+                                        <th class='col-xs-2 text-center'>権限</th>
+                                        <th class='col-xs-2 text-center'>所属</th>
+                                        <th class='col-xs-1 text-center'>状態</th>
+                                        <th class='col-xs-2 text-center'>更新者</th>
+                                        <th class='col-xs-2 text-center'>更新日時</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='table_admin_user_list_body'>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 追加・編集 -->
+        <div id="col-admin-user-edit" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box" style="border: 0px;margin-bottom: 0px;">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>ユーザー管理</h4>
+                </div>
+                <div class="box-body">
+                    <div class="box" style="border: 0px;margin-bottom: 0px;">
+                        <div class="box-header with-border" style="padding:5px;">
+                            <div class='col-xs-6 text-center'>
+                                <button id="chg_admin_user_list_mode" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%">
+                                    一覧
+                                </button>
+                                <button type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;background-color: rgba(255, 0, 0, 0.3);color:black;font-weight: 600">
+                                    追加・編集
+                                </button>
+                            </div>
+                            <div class="col-xs-6">
+                                {% if rst_m_user %}
+                                <form id="form_edit_user" style="margin-bottom: 20px">
+                                    <select class="form-control select2" style="width: 100%;" onchange="fnc_select_user_edit()" id="select_edit_user">
+                                        <option value="">検索</option>
+                                        {% for rst_user in rst_m_user %}
+                                        <option value="{{ rst_user.org_id }}_{{ rst_user.user_id }}">
+                                            {{ rst_user.user_nm }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="admin_user_edit_scroll_content" class="box-body scrollbar-macosx" style="height:406px">
+                        <div class='text-center' style="margin-bottom: 10px">
+                            <div class="col-xs-6">
+                                <div id='admin_user_edit_user_img'>
+                                    <img src='/static/img/user/noimage.png' style='width:100px'>
+                                    <div class='text' style="margin-bottom: 0px">noimage.png</div>
+                                </div>
+                                <div>
+                                    <button id='admin_user_edit_status' type='button' class='btn btn-primary'>
+                                    使用可能
+                                    </button>
+                                </div>
+                            </div>
+                            <div  class="col-xs-6">
+                                <ul style='height:150px; overflow:auto;border:1px #BBBBBB solid'>
+                                    {% for img_user in list_img_user %}
+                                    <li class='pull-left' onclick=fnc_admin_user_edit_img_replace('{{img_user}}')>
+                                        <img src='/static/img/user/{{ img_user}}' style='width:50px'>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" class='form-group'>
+                            <label for='admin_user_edit_user_id'>ID(必須 半角英数字)</label>
+                            <input id='admin_user_edit_user_id' type='text' class='form-control' placeholder="半角英数字16文字以内..." maxlength='16'>
+                        </div>
+                        <div class="col-xs-6" class='form-group'>
+                            <label for='admin_user_edit_user_nm'>名前(必須)</label>
+                            <input id='admin_user_edit_user_nm' type='text' class='form-control' placeholder="32文字以内..." maxlength='32'>
+                        </div>
+                        <div class="col-xs-6" class='form-group'>
+                            <label for='admin_user_edit_user_auth_cd'>権限</label>
+                            <select id='admin_user_edit_user_auth_cd' class='form-control' style='height:30px;font-size: 12px;'>
+                                {% for rst_auth in rst_user_auth %}
+                                <option value='{{ rst_auth.user_auth_cd }}'>{{ rst_auth.user_auth_nm }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-xs-6" class='form-group'>
+                            <label for='admin_user_edit_user_work'>所属</label>
+                            <input id='admin_user_edit_user_work' type='text' class='form-control' placeholder="32文字以内..." maxlength='32'>
+                        </div>
+                        <div class="col-xs-12" class='form-group'>
+                            <label for='admin_user_edit_user_msg'>メッセージ</label>
+                            <textarea id='admin_user_edit_user_msg' class='form-control' rows='1' maxlength='200' placeholder="200文字以内..."></textarea>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class='col-xs-12 text-center'>
+                            <button id='admin_user_edit_admin_save' type='button' class='btn btn-primary' style="width: 55%">
+                            保存する
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- ============================================================================= -->
+        <!-- グループ管理                                                                     -->
+        <!-- ============================================================================= -->
+        {% if rst_login_user_auth.sysadm_grp_flg == 1 %}
+        <!-- グループ追加・編集 -->
+        <div id="col-admin-grp-edit" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box" style="border: 0px;margin-bottom: 0px;box-shadow:0px">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>グループ管理</h4>
+                </div>
+                <div class="box-body">
+                    <div class="box" style="border: 0px;margin-bottom: 0px;">
+                        <div class="box-header with-border" style="padding:5px;">
+                            <div class='col-xs-6 text-center'>
+                                <button type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;background-color: rgba(255, 0, 0, 0.3);color:black;font-weight: 600">
+                                    グループ追加・編集
+                                </button>
+                                <button id="chg_admin_grp_user_edit_mode" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;">
+                                    メンバー追加・編集
+                                </button>
+                            </div>
+                            <div class="col-xs-6">
+                                {% if rst_m_grp %}
+                                <select class="form-control select2" style="width: 48%;" onchange="fnc_select_grp_edit()" id="select_edit_grp">
+                                    <option value="">グループ検索</option>
+                                    {% for rst_grp in rst_m_grp %}
+                                    <option value="{{ rst_grp.grp_id }}">
+                                        {{ rst_grp.grp_nm }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div  id="admin_grp_edit_scroll_content" class="box-body scrollbar-macosx" style="height:458px">
+                            <div class="col-xs-6">
+                                <table id='table_admin_grp_edit' class='table table-bordered'>
+                                    <thead id='table_admin_grp_edit_head'>
+                                        <tr>
+                                            <th class='col-xs-2 text-center'>ID</th>
+                                            <th class='col-xs-6 text-center'>グループ名</th>
+                                            <th class='col-xs-4 text-center'>状態</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='table_admin_grp_edit_body'>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class='text-center' style="margin-bottom: 10px">
+                                    <div class="col-xs-6">
+                                        <div id='admin_grp_edit_grp_img'>
+                                            <img src='/static/img/grp/noimage_grp.png' style='width:100px'>
+                                            <div class='text' style="margin-bottom: 0px">noimage_grp.png</div>
+                                        </div>
+                                        <div>
+                                            <button id='admin_grp_edit_status' type='button' class='btn btn-primary'>
+                                            使用可能
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div  class="col-xs-6">
+                                        <ul style='height:150px; overflow:auto;border:1px #BBBBBB solid'>
+                                            {% for img_grp in list_img_grp %}
+                                            <li class='pull-left' onclick=fnc_admin_user_edit_img_replace('{{img_grp}}')>
+                                                <img src='/static/img/grp/{{img_grp}}' style='width:50px'>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12" class='form-group'>
+                                    <label for='admin_grp_edit_grp_id'>グループID(必須 半角英数字)</label>
+                                    <input id='admin_grp_edit_grp_id' type='text' class='form-control' placeholder="半角英数字16文字以内..." maxlength='16'>
+                                </div>
+                                <div class="col-xs-12" class='form-group'>
+                                    <label for='admin_grp_edit_grp_nm'>グループ名(必須)</label>
+                                    <input id='admin_grp_edit_grp_nm' type='text' class='form-control' placeholder="32文字以内..." maxlength='32'>
+                                </div>
+                                <div class='col-xs-12 text-center' style="margin-top:20px">
+                                    <button id='admin_grp_edit_admin_save' type='button' class='btn btn-primary' style="width:55%">
+                                        保存する
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- グループメンバー追加・編集 -->
+        <div id="col-admin-grp-user-edit" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box" style="border: 0px;margin-bottom: 0px;box-shadow:0px">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>グループ管理</h4>
+                </div>
+                <div class="box-body">
+                    <div class="box" style="border: 0px;margin-bottom: 0px;">
+                        <div class="box-header with-border" style="padding:5px;">
+                            <div class='col-xs-6 text-center'>
+                                <button id="chg_admin_grp_edit_mode" type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;">
+                                    グループ追加・編集
+                                </button>
+                                <button type="button" class="btn btn-box-tool" style="border: 1px solid #BBBBBB ;width:48%;background-color: rgba(255, 0, 0, 0.3);color:black;font-weight: 600">
+                                    メンバー追加・編集
+                                </button>
+                            </div>
+                            <div class="col-xs-6">
+
+                                {% if rst_m_grp %}
+                                    <select class="form-control select2" style="width: 48%;" onchange="fnc_select_grp_user_edit_grp()" id="select_edit_grp_user_grp">
+                                        <option value="">グループ検索</option>
+                                        {% for rst_grp in rst_m_grp %}
+                                        <option value="{{ rst_grp.grp_id }}">
+                                            {{ rst_grp.grp_nm }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+
+                                {% if rst_m_user %}
+                                <select class="form-control select2" style="width: 48%;" onchange="fnc_select_grp_user_edit_user()" id="select_edit_grp_user_user">
+                                    <option value="">メンバー検索</option>
+                                    {% for rst_user in rst_m_user %}
+                                    <option value="{{ rst_user.org_id }}_{{ rst_user.user_id }}">
+                                        {{ rst_user.user_nm }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div  id="admin_grp_user_edit_scroll_content" class="box-body scrollbar-macosx" style="height:458px">
+                            <div class="col-xs-6">
+                                <!--
+                                <div class="input-group input-group-sm" style="margin-bottom: 20px">
+                                    <input id="grp_id_get_text" type="text" class="form-control" placeholder="グループID(半角英数字)..." maxlength='16'>
+                                    <span class="input-group-btn">
+                                        <button id="grp_id_get_btn" type="button" class="btn btn-primary">検索</button>
+                                    </span>
+                                </div>
+                                -->
+                                <h4 id="grp_user_edit_label_grp">グループ</h4>
+                                <table id='table_admin_grp_user_edit_target_grp' class='table table-bordered'>
+                                    <thead id='table_admin_grp_user_edit_target_grp_head'>
+                                        <tr>
+                                            <th class='col-xs-3 text-center'>ID</th>
+                                            <th class='col-xs-9 text-center'>グループ名</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='table_admin_grp_user_edit_target_grp_body'>
+                                        <tr>
+                                            <td  colspan="2" class='col-xs-12 text-center'>(グループを検索して下さい)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <h4 id="grp_user_edit_label_user">追加・編集対象ユーザー</h4>
+                                <table id='table_admin_grp_user_edit_target_user' class='table table-bordered'>
+                                    <thead id='table_admin_grp_user_edit_target_user_head'>
+                                        <tr>
+                                            <th class='col-xs-3 text-center'>ID</th>
+                                            <th class='col-xs-9 text-center'>ユーザー名</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='table_admin_grp_user_edit_target_user_body'>
+                                        <tr>
+                                            <td  colspan="2" class='col-xs-12 text-center'>(メンバーを検索して下さい)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class='col-xs-12 text-center' style="margin-bottom:20px">
+                                    <button id='admin_grp_user_edit_admin_add' type='button' class='btn btn-primary' style="width:45%">
+                                        追加する
+                                    </button>
+                                    <button id='admin_grp_user_edit_admin_del' type='button' class='btn btn-danger' style="width:45%">
+                                        削除する
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <h4>メンバー</h4>
+                                <table id='table_admin_grp_user_edit_grp' class='table table-bordered'>
+                                    <thead id='table_admin_grp_user_edit_grp_head'>
+                                        <tr>
+                                            <th class='col-xs-3 text-center'>ID</th>
+                                            <th class='col-xs-9 text-center'>ユーザー名</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='table_admin_grp_user_edit_grp_body'>
+                                        <tr>
+                                            <td  colspan="2" class='col-xs-12 text-center'>(グループを検索して下さい)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!--
+                                <div class="input-group input-group-sm" style="margin-bottom: 20px">
+                                    <input id="user_id_get_text" type="text" class="form-control" placeholder="ユーザーID(半角英数字)..." maxlength='16'>
+                                    <span class="input-group-btn">
+                                        <button id="user_id_get_btn" type="button" class="btn btn-primary">検索</button>
+                                    </span>
+                                </div>
+                                -->
+
+                                <!--
+                                <div id='admin_user_edit_user_img' style="text-align: center;margin: 10px">
+                                    <img src='/static/img/user/noimage.png' style='width:100px'>
+                                </div>
+                                <p id='admin_grp_edit_grp_nm'>
+                                    (名前)
+                                </p>
+                                <p id='admin_grp_edit_grp_nm'>
+                                    (権限)
+                                </p>
+                                <p id='admin_grp_edit_grp_nm'>
+                                    (所属)
+                                </p>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+
+        <!-- ============================================================================= -->
+        <!-- コスト管理                                                                       -->
+        <!-- ============================================================================= -->
+        {% if rst_login_user_auth.sysadm_cost_flg == 1 %}
+        <!--
+        <div id="col-admin-cost" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>コスト管理</h4>
+                </div>
+                <div id="admin_cost_scroll_content" class="box-body scrollbar-macosx" style="height:497px">
+                    <div id="cost_table_box"></div>
+                </div>
+            </div>
+        </div>
+        -->
+        {% endif %}
+
+
+        <!-- ============================================================================= -->
+        <!-- データ管理                                                                       -->
+        <!-- ============================================================================= -->
+        {% if rst_login_user_auth.sysadm_data_flg == 1 %}
+        <div id="col-admin-data" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>データ管理</h4>
+                </div>
+                <div class="form-group pull-left" style="padding-left:10px">
+                    <select  id="admin_mng_select" class="form-control" style="height:30px;font-size: 12px;">
+                        <option>{{ rst_login_org.org_nm }}のボイス</option>
+                        <option>{{ rst_login_org.org_nm }}のコメント</option>
+                        <option>{{ rst_login_org.org_nm }}のトーク</option>
+                        <option>{{ rst_login_org.org_nm }}のグループトーク</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm" style="margin-bottom: 10px;padding-right:10px">
+                    <input id="admin_mng_text" type="text" class="form-control" placeholder="検索する文字を入力....">
+                    <span class="input-group-btn">
+                        <button id="admin_mng_btn" type="button" class="btn btn-primary">データ取得</button>
+                    </span>
+                </div>
+                <div id="admin_data_scroll_content" class="box-body scrollbar-macosx" style="height:497px">
+                    <div class="box-body" id="admin_table_box" style="border-top: 1px solid #BBBBBB;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!--
+        {% if rst_login_user_auth.sysadm_data_flg == 1 %}
+        <div class="col-xs-6" style="padding-left:15px; padding-right:15px">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h4>画像管理</h4>
+                </div>
+                <div class="box-body">
+                    <ul class="row first">
+                        {% for img_user in list_img_user %}
+                        <li>
+                            <img src='/static/img/user/{{img_user}}'>
+                            <div class="text">{{img_user}}</div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        -->
+
+        <!-- ============================================================================= -->
+        <!-- 統計分析                                                                       -->
+        <!-- ============================================================================= -->
+        {% if rst_login_user_auth.sysadm_analyze_flg == 1 %}
+        <div id="col-admin-summary" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>統計情報</h4>
+                </div>
+                <div class="row" style="margin-left: 0px;margin-right: 0px;height:564px">
+                    <div class="col-xs-6" style="padding-left:1px; padding-right:1px;">
+                        <div class="box" style="border: 0px;margin-bottom: 0px;">
+                            <!--
+                            <div class="box-header with-border" style="padding:5px;text-align: center;">
+                                <h4 class="box-title">全体分析</h4>
+                            </div>
+                            -->
+                            <div id="admin_summary_scroll_content_left" class="box-body scrollbar-macosx" style="height:535px;">
+                                <div class="box" style="border: 0px;margin-bottom: 0px;">
+                                    <div class="box-header">
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="small-box bg-aqua">
+                                                    <div class="inner">
+                                                        <h3 id="all_voice_cnt">-</h3>
+                                                        <p>ボイス数</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-commenting-o"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="small-box bg-aqua" style="background-color: #3c8dbc !important;">
+                                                    <div class="inner">
+                                                        <h3 id="all_voice_comment_cnt">-</h3>
+                                                        <p>コメント数</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-commenting-o"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="admin_all_voice_tatal_box" class="col-xs-8">
+                                                <canvas ></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="small-box bg-green">
+                                                    <div class="inner">
+                                                        <h3 id="all_talk_send_cnt">-</h3>
+                                                        <p>トーク数(送信)</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-comments"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="small-box bg-yellow">
+                                                    <div class="inner">
+                                                        <h3 id="all_talk_resv_cnt">-</h3>
+                                                        <p>トーク数(受信)</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-comments"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="admin_all_talk_tatal_box" class="col-xs-8">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="small-box bg-red">
+                                                    <div class="inner">
+                                                        <h3 id="all_video_tatal_time">-</h3>
+                                                        <p>ビデオ通話使用時間</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                </div>
+                                                <!--
+                                                <div class="small-box bg-red">
+                                                    <div class="inner">
+                                                        <h3 id="all_video_call_resv_cnt">-/-</h3>
+                                                        <p>通話回数(発信/着信)</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                </div>
+                                                -->
+                                            </div>
+                                            <div id="admin_all_video_tatal_box" class="col-xs-8">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6" style="padding-left:1px; padding-right:1px">
+                        <div class="box" style="border: 0px;margin-bottom: 0px;">
+                            <!--
+                            <div class="box-header with-border" style="padding:5px;text-align: center;">
+                                <h4 class="box-title">個別分析</h4>
+                            </div>
+                            -->
+                            <div id="admin_summary_scroll_content_right" class="box-body scrollbar-macosx" style="height:535px;">
+                                <div class="box" style="border: 0px;margin-bottom: 0px;">
+                                    <div class="box-header">
+                                        {% if rst_m_user %}
+                                        <form id="form_user_analyze">
+                                            <select id="user_analyze" class="form-control select2" style="width: 100%;" onchange="fnc_select_user_analyze()">
+                                                <option value="">分析するユーザーを検索</option>
+                                                {% for rst_user in rst_m_user %}
+                                                <option value="{{ rst_user.org_id }}_{{ rst_user.user_id }}">
+                                                {{ rst_user.user_nm }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                    <div class="box-body scrollbar-macosx" style="border-top: 1px solid #BBBBBB;margin-bottom:0px;height:476px">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="small-box bg-aqua">
+                                                    <div class="inner">
+                                                        <h3 id="user_voice_cnt">-</h3>
+                                                        <p>ボイス数</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-commenting-o"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="small-box bg-aqua" style="background-color: #3c8dbc !important;">
+                                                    <div class="inner">
+                                                        <h3 id="user_voice_comment_cnt">-</h3>
+                                                        <p>コメント数</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-commenting-o"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="admin_user_voice_box" class="col-xs-8"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="small-box bg-green">
+                                                    <div class="inner">
+                                                        <h3 id="user_talk_send_cnt">-</h3>
+                                                        <p>トーク数(送信)</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-comments"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="small-box bg-yellow">
+                                                    <div class="inner">
+                                                        <h3 id="user_talk_resv_cnt">-</h3>
+                                                        <p>トーク数(受信)</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-comments"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="admin_user_talk_box" class="col-xs-8"></div>
+                                        </div>
+                                        <div class="row" style="margin-bottom: 20px">
+                                            <div class="col-xs-4">
+                                                <div class="small-box bg-red">
+                                                    <div class="inner">
+                                                        <h3 id="user_video_tatal_time">-</h3>
+                                                        <p>ビデオ通話使用時間</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                </div>
+                                                <!--
+                                                <div class="small-box bg-red">
+                                                    <div class="inner">
+                                                        <h3 id="user_video_tatal_cnt">-/-</h3>
+                                                        <p>通話回数(発信/着信)</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                </div>
+                                                -->
+                                            </div>
+                                            <div id="admin_user_video_box" class="col-xs-8"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- ============================================================================= -->
+        <!-- 連関分析                                                                       -->
+        <!-- ============================================================================= -->
+        {% if rst_login_user_auth.sysadm_analyze_flg == 1 %}
+        <div id="col-admin-link" class="col-xs-10" style="padding-left:1px; padding-right:20px; display:none;">
+            <div class="box">
+                <div class="box-header with-border" style="padding: 5px; text-align: center;">
+                    <h4>連関分析</h4>
+                </div>
+                <div id="admin_link_scroll_content" class="box-body">
+                    <svg id="bipartite" style = "width:90%;height:90%"  viewbox = "0 0 1100 610" preserveAspectRatio="xMidYMid">
+                    </svg>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </section>
+</div>
+
+<style type="text/css">
+    .list_select {
+        background-color:yellow;
+        color:red;
+    }
+    ul {
+        padding:0 0 0 0;
+        margin:0 0 40px 0;
+    }
+    ul li {
+        list-style:none;
+        margin-bottom:10px;
+    }
+
+    .text {
+      /*font-family: 'Bree Serif';*/
+      color:#666;
+      font-size:11px;
+      margin-bottom:10px;
+      padding:12px;
+      background:#fff;
+    }
+
+body {
+    overflow-y: hidden;
+}
+
+
+</style>
+<script>
+
+/* ------------------------------------------ */
+/* [ユーザー管理]ユーザー検索                       */
+/* ------------------------------------------ */
+function fnc_select_user_edit() {
+    var w_id      = document.getElementById('select_edit_user').value
+    var w_org_id  = w_id.split("_")[0]
+    var w_user_id = w_id.split("_")[1]
+    _SOK.emit('sok_cli_admin_edit_user_get_m_user', {
+         org_id  : w_org_id
+        ,user_id : w_user_id
+    });
+}
+
+/* ------------------------------------------ */
+/* [グループ管理]グループ編集-グループ検索             */
+/* ------------------------------------------ */
+function fnc_select_grp_edit() {
+    var w_id      = document.getElementById('select_edit_grp').value
+    var w_grp_id  = w_id.split("_")[0]
+    _SOK.emit('sok_cli_admin_edit_grp_get_m_grp', {
+         grp_id  : w_grp_id
+    });
+}
+
+/* ------------------------------------------ */
+/* [グループ管理]グループメンバー編集-グループ検索        */
+/* ------------------------------------------ */
+function fnc_select_grp_user_edit_grp() {
+    var w_id      = document.getElementById('select_edit_grp_user_grp').value
+    var w_grp_id  = w_id.split("_")[0]
+
+    $("#table_admin_grp_user_edit_grp_body").empty()
+    _SOK.emit('sok_cli_admin_edit_grp_user_get_m_user_member', {
+         grp_id  : w_grp_id
+    });
+
+    $("#table_admin_grp_user_edit_target_grp_body").empty()
+    _SOK.emit('sok_cli_admin_edit_grp_user_get_m_grp', {
+         grp_id  : w_grp_id
+    });
+
+}
+
+/* ------------------------------------------ */
+/* [グループ管理]グループメンバー編集-ユーザー検索        */
+/* ------------------------------------------ */
+function fnc_select_grp_user_edit_user() {
+    var w_id      = document.getElementById('select_edit_grp_user_user').value
+    var w_org_id  = w_id.split("_")[0]
+    var w_user_id = w_id.split("_")[1]
+
+    $("#table_admin_grp_user_edit_target_user_body").empty()
+
+    _SOK.emit('sok_cli_admin_edit_grp_user_get_m_user', {
+         org_id  : w_org_id
+        ,user_id : w_user_id
+    });
+}
+
+/* ------------------------------------------ */
+/* [統計情報]ユーザー検索                         */
+/* ------------------------------------------ */
+function fnc_select_user_analyze() {
+    var id = document.getElementById('user_analyze').value
+    var w_org_id  = id.split("_")[0];
+    var w_user_id = id.split("_")[1];
+
+    /* ------------------------------------------ */
+    /* [使用状況個別分析]ボイス/コメント集計取得           */
+    /* ------------------------------------------ */
+    _SOK.emit('sok_cli_admin_user_voice_tatal_get',{
+        org_id:   w_org_id
+       ,user_id:  w_user_id
+    });
+    $('#admin_user_voice_box').empty()
+    $('#admin_user_voice_box').append(
+        "<canvas id='admin_user_voice_tatal'></canvas>"
+    )
+    /* ------------------------------------------ */
+    /* [使用状況個別分析]トーク集計取得                 */
+    /* ------------------------------------------ */
+    _SOK.emit('sok_cli_admin_user_talk_tatal_get',{
+        org_id:   w_org_id
+       ,user_id:  w_user_id
+    });
+    $('#admin_user_talk_box').empty()
+    $('#admin_user_talk_box').append(
+        "<canvas id='admin_user_talk_tatal'></canvas>"
+    )
+    /* ------------------------------------------ */
+    /* [使用状況個別分析]ビデオ集計取得                */
+    /* ------------------------------------------ */
+    _SOK.emit('sok_cli_admin_user_video_tatal_get',{
+        org_id:   w_org_id
+       ,user_id:  w_user_id
+    });
+    $('#admin_user_video_box').empty()
+    $('#admin_user_video_box').append(
+        "<canvas id='admin_user_video_tatal'></canvas>"
+    )
+}
+
+
+
+
+
+    /* ------------------------------------------ */
+    /* [ユーザー管理]登録後結果通知                    */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_user_upd', function(msg) {
+        var w_result = msg.result
+        var w_msg    = msg.msg
+        if (w_result == "success") {
+            swal(
+                w_msg + 'に成功しました'
+               ,""
+               ,'success'
+                )
+        } else if (w_result == "error") {
+            swal(
+                'エラーが発生しました'
+               ,w_msg
+               ,'error'
+                )
+        }
+    })
+
+    /* ------------------------------------------ */
+    /* [グループ管理]登録後結果通知                    */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_grp_upd', function(msg) {
+        var w_result = msg.result
+        var w_msg    = msg.msg
+        if (w_result == "success") {
+            swal(
+                w_msg + 'に成功しました'
+               ,""
+               ,'success'
+                )
+        } else if (w_result == "error") {
+            swal(
+                'エラーが発生しました'
+               ,w_msg
+               ,'error'
+                )
+        }
+    })
+
+    /* ------------------------------------------ */
+    /* [グループ管理]メンバー追加結果通知                 */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_grp_member_add', function(msg) {
+        var w_result = msg.result
+        var w_msg    = msg.msg
+        var w_grp_id = msg.grp_id
+
+        $("#table_admin_grp_user_edit_grp_body").empty()
+        _SOK.emit('sok_cli_admin_edit_grp_user_get_m_user_member', {
+             grp_id  : w_grp_id
+        });
+        $("#table_admin_grp_user_edit_target_grp_body").empty()
+        _SOK.emit('sok_cli_admin_edit_grp_user_get_m_grp', {
+             grp_id  : w_grp_id
+        });
+    })
+
+
+    /* ------------------------------------------ */
+    /* [グループ管理]メンバー削除結果通知                 */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_grp_member_del', function(msg) {
+        var w_result = msg.result
+        var w_msg    = msg.msg
+        var w_grp_id = msg.grp_id
+
+        $("#table_admin_grp_user_edit_grp_body").empty()
+        _SOK.emit('sok_cli_admin_edit_grp_user_get_m_user_member', {
+             grp_id  : w_grp_id
+        });
+        $("#table_admin_grp_user_edit_target_grp_body").empty()
+        _SOK.emit('sok_cli_admin_edit_grp_user_get_m_grp', {
+             grp_id  : w_grp_id
+        });
+    })
+
+    /* ------------------------------------------ */
+    /* [ユーザー管理]登録前確認                       */
+    /* ------------------------------------------ */
+    $('#admin_user_edit_admin_save').click(function() {
+        var chk_flg = 0
+        var user_id   = escapeHTML($('#admin_user_edit_user_id').val());
+        // 必須チェック
+        if (user_id == "") {
+            chk_flg = 1
+            $("label[for=admin_user_edit_user_id]").css('color','red')
+        } else {
+            // 半角英数字チェック(アンダースコアNG)
+            if( user_id.match( /[^A-Za-z0-9\s.-]+/ ) ) {
+                chk_flg = 1
+                $("label[for=admin_user_edit_user_id]").css('color','red')
+            } else {
+                $("label[for=admin_user_edit_user_id]").css('color','black')
+            }
+        }
+
+        var user_nm   = escapeHTML($('#admin_user_edit_user_nm').val());
+        // 必須チェック
+        if (user_nm == "") {
+            chk_flg = 1
+            $("label[for=admin_user_edit_user_nm]").css('color','red')
+        } else {
+            $("label[for=admin_user_edit_user_nm]").css('color','black')
+        }
+
+        if (chk_flg == 1) {
+            return
+        }
+
+        // 登録前確認
+        _SOK.emit('sok_cli_admin_user_upd_chk', {
+             org_id :   _LOGIN_ORG_ID
+            ,user_id:   user_id
+        });
+    });
+
+
+    /* ------------------------------------------ */
+    /* [グループ管理]グループ編集-登録前確認              */
+    /* ------------------------------------------ */
+    $('#admin_grp_edit_admin_save').click(function() {
+        var chk_flg = 0
+        var grp_id   = escapeHTML($('#admin_grp_edit_grp_id').val());
+        // 必須チェック
+        if (grp_id == "") {
+            chk_flg = 1
+            $("label[for=admin_grp_edit_grp_id]").css('color','red')
+        } else {
+            // 半角英数字チェック(アンダースコアNG)
+            if( grp_id.match( /[^A-Za-z0-9\s.-]+/ ) ) {
+                chk_flg = 1
+                $("label[for=admin_grp_edit_grp_id]").css('color','red')
+            } else {
+                $("label[for=admin_grp_edit_grp_id]").css('color','black')
+            }
+        }
+
+        var grp_nm   = escapeHTML($('#admin_grp_edit_grp_nm').val());
+        // 必須チェック
+        if (grp_nm == "") {
+            chk_flg = 1
+            $("label[for=admin_grp_edit_grp_nm]").css('color','red')
+        } else {
+            $("label[for=admin_grp_edit_grp_nm]").css('color','black')
+        }
+
+        if (chk_flg == 1) {
+            return
+        }
+
+        // 登録前確認
+        _SOK.emit('sok_cli_admin_grp_upd_chk', {
+             grp_id :   grp_id
+        });
+    });
+
+
+    /* ------------------------------------------ */
+    /* [グループ管理]メンバー編集-追加                   */
+    /* ------------------------------------------ */
+    $('#admin_grp_user_edit_admin_add').click(function() {
+        var chk_flg = 0
+        var grp_id   = $('#table_admin_grp_user_edit_target_grp_body tr').children('td:first').text()
+        var user_id  = $('#table_admin_grp_user_edit_target_user_body tr').children('td:first').text();
+
+        // 必須チェック
+        if (grp_id == "") {
+            chk_flg = 1
+            $("#grp_user_edit_label_grp").css('color','red')
+        } else {
+            // 半角英数字チェック(アンダースコアNG)
+            if( grp_id.match( /[^A-Za-z0-9\s.-]+/ ) ) {
+                chk_flg = 1
+                $("#grp_user_edit_label_grp").css('color','red')
+            } else {
+                $("#grp_user_edit_label_grp").css('color','black')
+            }
+        }
+        // 必須チェック
+        if (user_id == "") {
+            chk_flg = 1
+            $("#grp_user_edit_label_user").css('color','red')
+        } else {
+            // 半角英数字チェック(アンダースコアNG)
+            if( user_id.match( /[^A-Za-z0-9\s.-]+/ ) ) {
+                chk_flg = 1
+                $("#grp_user_edit_label_user").css('color','red')
+            } else {
+                $("#grp_user_edit_label_user").css('color','black')
+            }
+        }
+
+        if (chk_flg == 1) {
+            return
+        }
+
+        // メンバー追加
+        _SOK.emit('sok_cli_admin_grp_member_add', {
+             grp_id :   grp_id
+            ,user_id :  user_id
+        });
+    });
+
+
+    /* ------------------------------------------ */
+    /* [グループ管理]メンバー編集-追加                   */
+    /* ------------------------------------------ */
+    $('#admin_grp_user_edit_admin_del').click(function() {
+        var chk_flg = 0
+        var grp_id   = $('#table_admin_grp_user_edit_target_grp_body tr').children('td:first').text()
+        var user_id  = $('#table_admin_grp_user_edit_target_user_body tr').children('td:first').text();
+
+        // 必須チェック
+        if (grp_id == "") {
+            chk_flg = 1
+            $("#grp_user_edit_label_grp").css('color','red')
+        } else {
+            // 半角英数字チェック(アンダースコアNG)
+            if( grp_id.match( /[^A-Za-z0-9\s.-]+/ ) ) {
+                chk_flg = 1
+                $("#grp_user_edit_label_grp").css('color','red')
+            } else {
+                $("#grp_user_edit_label_grp").css('color','black')
+            }
+        }
+        // 必須チェック
+        if (user_id == "") {
+            chk_flg = 1
+            $("#grp_user_edit_label_user").css('color','red')
+        } else {
+            // 半角英数字チェック(アンダースコアNG)
+            if( user_id.match( /[^A-Za-z0-9\s.-]+/ ) ) {
+                chk_flg = 1
+                $("#grp_user_edit_label_user").css('color','red')
+            } else {
+                $("#grp_user_edit_label_user").css('color','black')
+            }
+        }
+
+        if (chk_flg == 1) {
+            return
+        }
+
+        // メンバー削除
+        _SOK.emit('sok_cli_admin_grp_member_del', {
+             grp_id :   grp_id
+            ,user_id :  user_id
+        });
+    });
+
+
+    /* ------------------------------------------ */
+    /* [ユーザー管理]登録済ユーザー編集                 */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_edit_user_get_m_user', function(msg) {
+        var w_org_id       = msg.org_id
+        var w_org_nm       = msg.org_nm
+        var w_user_id      = msg.user_id
+        var w_user_nm      = msg.user_nm
+        if (!msg.user_auth_cd) {
+            var w_user_auth_cd = "000" // 一般ユーザー
+        } else {
+            var w_user_auth_cd = msg.user_auth_cd
+        }
+        if (!msg.profile_work) {
+            var w_profile_work = ""
+        } else {
+            var w_profile_work = msg.profile_work
+        }
+        if (!msg.profile_msg) {
+            var w_profile_msg = ""
+        } else {
+            var w_profile_msg = msg.profile_msg
+        }
+        if (!msg.profile_img_file) {
+            var w_profile_img_file = "noimage.png"
+        } else {
+            var w_profile_img_file = msg.profile_img_file
+        }
+        var w_stop_flg         = msg.stop_flg
+        if (w_stop_flg == 0) {
+            var stop_btn_class = "btn-primary"
+            var stop_btn_text  = "使用可能"
+            var stop_btn_flg   = 0
+        } else {
+            var stop_btn_class = "btn-danger"
+            var stop_btn_text  = "停止中"
+            var stop_btn_flg   = 1
+        }
+
+
+        $("#admin_user_edit_user_id").val(w_user_id)
+        $("#admin_user_edit_user_nm").val(w_user_nm)
+        $("#admin_user_edit_user_auth_cd").val(w_user_auth_cd)
+        $("#admin_user_edit_user_work").val(w_profile_work)
+        $("#admin_user_edit_user_msg").val(w_profile_msg)
+
+        fnc_admin_user_edit_img_replace(w_profile_img_file)
+
+        if (w_stop_flg == 1) {
+            $("#admin_user_edit_status").removeClass('btn-primary');
+            $("#admin_user_edit_status").addClass('btn-danger');
+            $("#admin_user_edit_status").text("停止中");
+        } else {
+            $("#admin_user_edit_status").removeClass('btn-danger');
+            $("#admin_user_edit_status").addClass('btn-primary');
+            $("#admin_user_edit_status").text("使用可能");
+        }
+
+    })
+
+    /* ------------------------------------------ */
+    /* [ユーザー管理]登録前確認                       */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_user_upd_chk', function(msg) {
+        var w_exist_flg = msg.exist_flg
+        var w_user_id   = msg.user_id
+        var w_user_nm   = msg.user_nm
+        if ( w_exist_flg == 1) {
+            w_title = "更新"
+            w_text =  w_user_nm + "(ID:" + w_user_id  + ")の情報を更新します"
+        } else {
+            var w_user_id   = escapeHTML($('#admin_user_edit_user_id').val());
+            var w_user_nm   = escapeHTML($('#admin_user_edit_user_nm').val());
+            w_title = "新規追加"
+            w_text =  w_user_nm + "(ID:" + w_user_id  + ")を新規追加します"
+        }
+
+        swal({
+            title: w_title,
+            text: w_text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'キャンセル'
+        }).then(function () {
+            var user_id   = escapeHTML($('#admin_user_edit_user_id').val());
+            var user_nm   = escapeHTML($('#admin_user_edit_user_nm').val());
+            var auth_cd   = $("#admin_user_edit_user_auth_cd").val();
+            if (!auth_cd) {
+                auth_cd = '000'
+            }
+            var user_work = escapeHTML($('#admin_user_edit_user_work').val());
+            var user_msg  = escapeHTML($('#admin_user_edit_user_msg').val());
+            var user_img  = escapeHTML($('#admin_user_edit_user_img > div').text());
+            if ($("#admin_user_edit_status").hasClass('btn-primary')) {
+                var stop_btn_flg = 0
+            } else {
+                var stop_btn_flg = 1
+            }
+
+            // ユーザーマスタ更新
+            _SOK.emit('sok_cli_admin_user_upd', {
+                 org_id :   _LOGIN_ORG_ID
+                ,user_id:   user_id
+                ,user_nm:   encodeURIComponent(user_nm)
+                ,auth_cd:   auth_cd
+                ,user_work: encodeURIComponent(user_work)
+                ,user_msg: encodeURIComponent(user_msg)
+                ,user_img: encodeURIComponent(user_img)
+                ,stop_flg:  stop_btn_flg
+            });
+        })
+    })
+
+
+    /* ------------------------------------------ */
+    /* [グループ管理]登録前確認                       */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_grp_upd_chk', function(msg) {
+        var w_exist_flg = msg.exist_flg
+        var w_upd_flg   = msg.upd_flg
+        var w_grp_id    = msg.grp_id
+        var w_grp_nm    = msg.grp_nm
+
+        if ( w_upd_flg == 0) {
+            swal(
+                "ID重複エラー"
+               ,"ID:" + w_grp_id　+ "は使用できません"
+               ,'error'
+                )
+            return false
+        }
+
+        if ( w_exist_flg == 1) {
+            w_title = "更新"
+            w_text =  w_grp_nm + "(ID:" + w_grp_id  + ")の情報を更新します"
+        } else {
+            var w_grp_id   = escapeHTML($('#admin_grp_edit_grp_id').val());
+            var w_grp_nm   = escapeHTML($('#admin_grp_edit_grp_nm').val());
+            w_title = "新規追加"
+            w_text =  w_grp_nm + "(ID:" + w_grp_id  + ")を新規追加します"
+        }
+
+        swal({
+            title: w_title,
+            text: w_text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'キャンセル'
+        }).then(function () {
+            var grp_id   = escapeHTML($('#admin_grp_edit_grp_id').val());
+            var grp_nm   = escapeHTML($('#admin_grp_edit_grp_nm').val());
+            var grp_img  = escapeHTML($('#admin_grp_edit_grp_img > div').text());
+            if ($("#admin_grp_edit_status").hasClass('btn-primary')) {
+                var stop_btn_flg = 0
+            } else {
+                var stop_btn_flg = 1
+            }
+
+            // グループマスタ更新
+            _SOK.emit('sok_cli_admin_grp_upd', {
+                 org_id :   _LOGIN_ORG_ID
+                ,grp_id:   grp_id
+                ,grp_nm:   encodeURIComponent(grp_nm)
+                ,grp_img: encodeURIComponent(grp_img)
+                ,stop_flg:  stop_btn_flg
+            });
+        })
+    })
+
+    /* ------------------------------------------ */
+    /* [グループ管理]グループ編集-グループ取得             */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_edit_grp_get_m_grp', function(msg) {
+        var w_grp_id   = msg.grp_id
+        var w_grp_nm   = msg.grp_nm
+        var w_stop_flg = msg.stop_flg
+        if (w_stop_flg == 0) {
+            var stop_btn_class = "btn-primary"
+            var stop_btn_text  = "使用可能"
+            var stop_btn_flg   = 0
+        } else {
+            var stop_btn_class = "btn-danger"
+            var stop_btn_text  = "停止中"
+            var stop_btn_flg   = 1
+        }
+
+        $("#admin_grp_edit_grp_id").val(w_grp_id)
+        $("#admin_grp_edit_grp_nm").val(w_grp_nm)
+
+        if (w_stop_flg == 1) {
+            $("#admin_grp_edit_status").removeClass('btn-primary');
+            $("#admin_grp_edit_status").addClass('btn-danger');
+            $("#admin_grp_edit_status").text("停止中");
+        } else {
+            $("#admin_grp_edit_status").removeClass('btn-danger');
+            $("#admin_grp_edit_status").addClass('btn-primary');
+            $("#admin_grp_edit_status").text("使用可能");
+        }
+     })
+
+
+    /* ------------------------------------------ */
+    /* [グループ管理]グループメンバー編集-グループ取得        */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_edit_grp_user_get_m_grp', function(msg) {
+        var w_grp_id   = msg.grp_id
+        var w_grp_nm   = msg.grp_nm
+        $("#table_admin_grp_user_edit_target_grp_body").append(
+              "<tr>"
+            +     "<td class='text-center'>" + w_grp_id + "</td>"
+            +     "<td class='text-center'>" + w_grp_nm + "</td>"
+            + "</tr>"
+        )
+     })
+
+    /* ------------------------------------------ */
+    /* [グループ管理]グループメンバー編集-メンバー取得        */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_edit_grp_user_get_m_user_member', function(msg) {
+        var w_user_id   = msg.user_id
+        var w_user_nm   = msg.user_nm
+        var w_last_flg  = msg.last_flg
+        $("#table_admin_grp_user_edit_grp_body").append(
+              "<tr>"
+            +     "<td class='text-center'>" + w_user_id + "</td>"
+            +     "<td class='text-center'>" + w_user_nm + "</td>"
+            + "</tr>"
+        )
+        /*
+        if (w_last_flg == 1) {
+            $.extend( $.fn.dataTable.defaults, {
+                language: { url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json" }
+            });
+            $("#table_admin_grp_user_edit_grp").DataTable();
+        }
+        */
+     })
+
+    /* ------------------------------------------ */
+    /* [グループ管理]グループメンバー編集-対象ユーザー取得    */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_edit_grp_user_get_m_user', function(msg) {
+        var w_user_id   = msg.user_id
+        var w_user_nm   = msg.user_nm
+        $("#table_admin_grp_user_edit_target_user_body").append(
+              "<tr>"
+            +     "<td class='text-center'>" + w_user_id + "</td>"
+            +     "<td class='text-center'>" + w_user_nm + "</td>"
+            + "</tr>"
+        )
+     })
+
+    /* ------------------------------------------ */
+    /* [連関グラフ]トーク                  　           */
+    /* ------------------------------------------ */
+    var bipartite_data="{{ rst_bipartite|safe }}"
+    var bipartite_data=bipartite_data.replace(/\(/g, '[');
+    var bipartite_data=bipartite_data.replace(/\)/g, ']');
+    var bipartite_data=bipartite_data.replace(/\'/g, '\"');
+    var bipartite_data=bipartite_data.replace(/None/g, 0);
+    var bipartite_data=JSON.parse(bipartite_data);
+
+    var width = 1100, height = 610, margin ={b:0, t:40, l:170, r:50};
+    var svg = d3.select("#bipartite")//.attr("viewbox","0 0 " + width + " " + height)
+        .append("g").attr("transform","translate("+ margin.l+","+margin.t+")");
+    var data = [
+        {data:bP.partData(bipartite_data,2), id:'talk', header:["名前","名前", "トーク"]}
+       ,{data:bP.partData(bipartite_data,3), id:'video', header:["名前","名前", "ビデオ"]}
+    ];
+    bP.draw(data, svg);
+
+
+    /* ------------------------------------------ */
+    /* [コスト管理]今月の予定コストデータ受信              */
+    /* ------------------------------------------*/
+    _SOK.on('sok_srv_admin_cost_data_get_this', function(msg) {
+        /* Pennding
+        var w_cost_total        = msg.cost_total
+        var w_cost_active_user  = msg.cost_active_user
+        var w_count_active_user = msg.count_active_user
+        var w_cost_add_user     = msg.cost_add_user
+        var w_count_add_user    = msg.count_add_user
+        w_cost_total            = fnc_price_separate(w_cost_total)
+        w_cost_active_user      = fnc_price_separate(w_cost_active_user)
+        w_cost_add_user         = fnc_price_separate(w_cost_add_user)
+
+        console.log(w_cost_total)
+
+        $('#this_cost_total').empty()
+        $('#this_cost_active_user').empty()
+        $('#this_count_active_user').empty()
+        $('#this_cost_add_user').empty()
+        $('#this_count_add_user').empty()
+
+        $('#this_cost_total').append('今月の請求額： ￥' + w_cost_total)
+        $('#this_cost_active_user').append('ユーザー数: ￥' + w_cost_active_user)
+        $('#this_count_active_user').append( '(' + w_count_active_user + '人)')
+        $('#this_cost_add_user').append('新規ユーザー: ￥' + w_cost_add_user)
+        $('#this_count_add_user').append( '(' + w_count_add_user + '人)')
+
+        // 増えてきたらデータテーブル適用 10件以上
+
+        $('#cost_table_body').append(
+            "<tr>"
+          +     "<td class='text-center'>" + w_status + "</td>"
+          +     "<td class='text-center'>" + w_year + "</td>"
+          +     "<td class='text-center'>" + w_month + "</td>"
+          +     "<td class='text-center'>" + w_cost_total + "</td>"
+          +     "<td class='text-center'>" + w_cost_detail_active_user + "</td>"
+          +     "<td class='text-center'>" + w_cost_detail_add_user + "</td>"
+          + "</tr>"
+        );
+        */
+
+    })
+
+    /* ------------------------------------------ */
+    /* [コスト管理]過去コストデータ受信                   */
+    /* ------------------------------------------ */
+    _SOK.on('sok_srv_admin_cost_data_get_prev', function(msg) {
+        var w_status                  = msg.status
+        var w_year                    = msg.year
+        var w_month                   = msg.month
+        var w_cost_total              = msg.cost_total
+        var w_cost_detail_active_user = msg.cost_detail_active_user
+        var w_cost_detail_add_user    = msg.cost_detail_add_user
+        w_cost_total                  = fnc_price_separate(w_cost_total)
+        w_cost_detail_active_user     = fnc_price_separate(w_cost_detail_active_user)
+        w_cost_detail_add_user        = fnc_price_separate(w_cost_detail_add_user)
+        if ( w_status == 'CONFIRM') {
+            w_status = "<span class='label label-success'>確定</span>"
+        } else if ( w_status == 'PAID') {
+            w_status = "<span class='label label-info'>支払済</span>"
+        }
+        if($('#cost_table').length){} else {
+            $('#cost_table_box').append("<table id='cost_table' class='table table-bordered'></table>")
+            $('#cost_table').append(
+                "<thead id='cost_table_head'>"
+              +     "<tr>"
+              +         "<th class='col-xs-1 text-center'>状況</th>"
+              +         "<th class='col-xs-1 text-center'>年</th>"
+              +         "<th class='col-xs-1 text-center'>月</th>"
+              +         "<th class='col-xs-3 text-center'>金額</th>"
+              +         "<th class='col-xs-3 text-center'>ユーザー数料金</th>"
+              +         "<th class='col-xs-3 text-center'>新規ユーザー料金</th>"
+              +     "</tr>"
+              + "</thead>"
+              + "<tbody id='cost_table_body'>"
+              + "</tbody>"
+            );
+        }
+        $('#cost_table_body').append(
+            "<tr>"
+          +     "<td class='text-center'>" + w_status + "</td>"
+          +     "<td class='text-center'>" + w_year + "</td>"
+          +     "<td class='text-center'>" + w_month + "</td>"
+          +     "<td class='text-center'>" + w_cost_total + "</td>"
+          +     "<td class='text-center'>" + w_cost_detail_active_user + "</td>"
+          +     "<td class='text-center'>" + w_cost_detail_add_user + "</td>"
+          + "</tr>"
+        );
+    })
+
+</script>
+
+{% endblock %}

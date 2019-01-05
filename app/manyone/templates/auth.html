@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manyone-ログイン</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+    <!-- icon -->
+    <link rel="shortcut icon" type="image/ico" href="/static/img/manyone_icon.ico">
+</head>
+
+<body class="hold-transition login-page" style="overflow-y: hidden;">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="/static/img/manyone_logo.png" style="width: 250px">
+        </div>
+        <div class="login-box-body">
+            <p class="login-box-msg"><span style="color: #13448f;font-size: 30px"><b>STEP1</b></span><br><br><b>組織ID</b>を入力して下さい</p>
+            <form method="post">
+                <div class="form-group has-feedback">
+                    <input type="orgid" name="orgid" class="form-control" placeholder="組織ID...">
+                    <span class="help-block text-center text-red">{{errmsg}}</span>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">認証</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
